@@ -1,44 +1,29 @@
-require('dotenv').config();
-const { REST, Routes } = require('discord.js');
-const fs = require('fs');
-const path = require('path');
+const { REST, Routes } = require("discord.js");
+const fs = require("fs");
+const path = require("path");
+require("dotenv").config();
 
-const clientId = process.env.DISCORD_CLIENT_ID;
-const token = process.env.DISCORD_TOKEN;
+const commands = [];
+const commandFiles = fs
+  .readdirSync(path.join(__dirname, "../commands"))
+  .filter((file) => file.endsWith(".js"));
 
-module.exports = async () => {
-  const commands = [];
+for (const file of commandFiles) {
+  const command = require(`../commands/${file}`);
+  commands.push(command.data.toJSON());
+}
 
-  const commandsPath = path.join(__dirname, '../commands');
-  fs.readdirSync(commandsPath).forEach((category) => {
-    const categoryPath = path.join(commandsPath, category);
-    const commandFiles = fs
-      .readdirSync(categoryPath)
-      .filter((file) => file.endsWith('.js'));
+const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN);
 
-    for (const file of commandFiles) {
-      const command = require(path.join(categoryPath, file));
-      commands.push(command.data.toJSON());
-    }
-  });
-
-  const rest = new REST({ version: '10' }).setToken(token);
-
+(async () => {
   try {
-    console.log(
-      global.styles.warningColor(
-        '🔄 Started refreshing application (/) commands.'
-      )
+    console.log("🌀 Registering slash commands...");
+    await rest.put(
+      Routes.applicationCommands(process.env.DISCORD_CLIENT_ID),
+      { body: commands }
     );
-
-    await rest.put(Routes.applicationCommands(clientId), { body: commands });
-
-    console.log(
-      global.styles.commandColor(
-        '✅ Successfully reloaded application (/) commands.'
-      )
-    );
+    console.log("✅ Slash commands registered successfully!");
   } catch (error) {
-    console.error(global.styles.errorColor(error));
+    console.error(error);
   }
-};
+})();

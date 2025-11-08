@@ -1,3 +1,18 @@
+/* === CUSTOM FONT === */
+@font-face {
+  font-family: 'YourCustomFont';
+  src: url('fonts/YourCustomFont.woff2') format('woff2'),
+       url('fonts/YourCustomFont.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Apply font everywhere */
+body {
+  font-family: 'YourCustomFont', sans-serif;
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
 :root {

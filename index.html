@@ -1,32 +1,221 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Blazura - Main Page</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Blazura - main page</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<!-- Fallback Google font + custom font via @font-face -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  /* Replace this file path with your custom font file in /fonts/ */
+  @font-face {
+    font-family: 'YourCustom'; 
+    src: url('fonts/YourCustomFont.woff2') format('woff2'),
+         url('fonts/YourCustomFont.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+  :root{
+    --bg:#0b0b0c; /* deep dark */
+    --panel: #111214;
+    --fire1: #ff6b35; /* fire */
+    --violet: #9b59ff; /* violet */
+    --blue: #00a3ff; /* blue */
+    --lightblue: #64d8ff; /* light blue */
+    --lightcyan: #7fffd4; /* light cyan */
+    --glass: rgba(255,255,255,0.03);
+  }
+
+  /* Basic reset */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family: YourCustom, Poppins, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: radial-gradient(1200px 600px at 10% 10%, rgba(255,107,53,0.04), transparent 6%),
+                radial-gradient(1000px 500px at 90% 90%, rgba(99,102,241,0.04), transparent 8%),
+                var(--bg);
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    padding:28px;
+    line-height:1.25;
+  }
+
+  .container{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    gap:28px;
+    align-items:start;
+  }
+
+  /* Header */
+  header{
+    display:flex;
+    gap:18px;
+    align-items:center;
+  }
+  .brand{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    flex:0 0 auto;
+  }
+  .logo{
+    width:84px;height:84px;border-radius:14px;
+    background:linear-gradient(135deg,var(--fire1), var(--violet));
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
+    box-shadow:0 6px 28px rgba(99,102,241,0.12), 0 2px 8px rgba(0,163,255,0.06);
+  }
+  .logo img{width:84px;height:84px;object-fit:cover}
+  h1{
+    font-size:28px;letter-spacing:1px;
+    text-transform:uppercase;font-weight:800;
+    text-shadow:
+      0 1px 0 rgba(0,0,0,0.6),
+      0 6px 30px rgba(155,89,255,0.12),
+      0 2px 10px rgba(0,163,255,0.06);
+    color:linear-gradient(90deg,var(--violet),var(--blue));
+  }
+
+  /* The curved photo arc container */
+  .head-right{
+    margin-left:auto;
+    width:480px;height:120px;position:relative;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .arc{
+    width:420px;height:260px;position:relative;pointer-events:none;
+  }
+  .arc .photo{
+    position:absolute;left:50%;top:50%;transform-origin:center;
+    width:120px;height:120px;border-radius:28px;overflow:hidden;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.6), 0 0 24px rgba(0,163,255,0.06);
+    pointer-events:auto;transition:transform .45s cubic-bezier(.2,.9,.3,1), box-shadow .25s;
+    user-select:none;
+    border:3px solid rgba(255,255,255,0.03);
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25));
+  }
+  .photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .photo:hover{transform:scale(1.08) translateY(-8px); box-shadow:0 20px 60px rgba(155,89,255,0.12)}
+  /* arc positions: 4 points on nice curve */
+  .pos0{transform: translate(-210px,-40px) rotate(-18deg)}
+  .pos1{transform: translate(-70px,-78px) rotate(-6deg)}
+  .pos2{transform: translate(70px,-78px) rotate(6deg)}
+  .pos3{transform: translate(210px,-40px) rotate(18deg)}
+
+  /* make carousel draggable */
+  .arc.dragging .photo{transition:none}
+
+  /* content sections */
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+    border-radius:14px;padding:18px;
+    box-shadow: 0 6px 40px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+
+  /* Embedded HTML area */
+  #embedded-html{
+    min-height:140px;
+    border-radius:12px;
+    padding:14px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(255,255,255,0.02));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    color: #eaf6ff;
+  }
+
+  /* Table with glow */
+  table{
+    width:100%;border-collapse:collapse;font-size:14px;
+  }
+  thead th{
+    text-align:left;padding:12px 14px;font-weight:600;color:#fff;
+    background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  tbody td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.03)}
+  table.glow{
+    border-radius:12px;overflow:hidden;
+    box-shadow: 0 6px 30px rgba(99,102,241,0.06), 0 0 30px rgba(0,163,255,0.04);
+    border: 1px solid rgba(99,102,241,0.08);
+  }
+  table.glow tbody tr:hover{
+    background: linear-gradient(90deg, rgba(0,163,255,0.04), rgba(155,89,255,0.04));
+    box-shadow: inset 0 0 40px rgba(155,89,255,0.04);
+  }
+
+  /* Color wheel area center */
+  .color-wrap{
+    display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px;
+  }
+  .wheel-box{
+    width:360px;height:360px;border-radius:18px;background:var(--panel);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 12px 60px rgba(0,0,0,0.6), 0 0 40px rgba(99,102,241,0.06);
+    border:1px solid rgba(255,255,255,0.03);
+    position:relative;
+  }
+  #hueCanvas{width:260px;height:260px;border-radius:999px;touch-action:none}
+  #svCanvas{position:absolute; width:160px;height:160px;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+  .color-info{
+    display:flex;gap:10px;align-items:center;
+  }
+  .color-sample{
+    width:52px;height:36px;border-radius:8px;border:3px solid rgba(255,255,255,0.06);
+    box-shadow:0 6px 20px rgba(0,0,0,0.6), 0 0 18px rgba(0,163,255,0.06);
+  }
+  .codes{font-family:monospace;font-size:13px;color:#d7e9ff}
+
+  /* Buttons */
+  .actions{display:flex;gap:14px;align-items:center}
+  .btn{
+    padding:12px 18px;border-radius:12px;font-weight:700;text-decoration:none;
+    display:inline-flex;gap:12px;align-items:center;justify-content:center;
+    background:linear-gradient(90deg,var(--blue),var(--violet));
+    color:white;border:0;cursor:pointer;box-shadow:0 12px 40px rgba(0,163,255,0.08);
+    transition:transform .18s ease, box-shadow .18s;
+  }
+  .btn:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(155,89,255,0.12)}
+  .btn.discord{background:linear-gradient(90deg,#5865f2,#6a7cff);box-shadow:0 12px 40px rgba(88,101,242,0.12)}
+  .btn.youtube{background:linear-gradient(90deg,#ff3b3b,#ff6b35);box-shadow:0 12px 40px rgba(255,107,53,0.12)}
+
+  /* layout at bottom */
+  .bottom-row{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;justify-content:space-between}
+  .left-col{flex:1 1 420px}
+  .right-col{width:420px}
+  footer{display:flex;justify-content:center;padding:28px 0 0;color:rgba(255,255,255,0.32)}
+
+  /* small screens */
+  @media (max-width:980px){
+    .head-right{display:none}
+    .container{padding:0 8px}
+    .right-col{width:100%}
+  }
+
+</style>
 </head>
 <body>
   <div class="container">
+
     <!-- HEADER -->
     <header>
       <div class="brand">
         <div class="logo">
+          <!-- Replace logo.png -->
           <img src="assets/logo.png" alt="logo" onerror="this.style.display='none'">
         </div>
         <div>
           <h1>Blazura</h1>
-          <div class="subtext">by ZINGAMY</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.45);margin-top:6px">by ZINGAMY</div>
         </div>
       </div>
 
+      <!-- right: curved photos -->
       <div class="head-right">
         <div class="arc" id="arc">
+          <!-- Put your images in assets/photo1.jpg ... photo4.jpg -->
           <div class="photo pos0" data-index="0"><img src="assets/photo1.jpg" alt=""></div>
           <div class="photo pos1" data-index="1"><img src="assets/photo2.jpg" alt=""></div>
           <div class="photo pos2" data-index="2"><img src="assets/photo3.jpg" alt=""></div>
@@ -34,40 +223,295 @@
         </div>
       </div>
     </header>
+<!-- 🔥 Medium 4-Photo Infinite Carousel Section -->
+<section class="card photo-carousel">
+  <h2 style="margin-bottom:16px;text-align:center;color:var(--lightblue)">Gallery Preview</h2>
+  <div class="carousel-container">
+    <div class="carousel-track">
+      <div class="carousel-item"><img src="images/pic1.jpg" alt="Preview 1"></div>
+      <div class="carousel-item"><img src="images/pic2.jpg" alt="Preview 2"></div>
+      <div class="carousel-item"><img src="images/pic3.jpg" alt="Preview 3"></div>
+      <div class="carousel-item"><img src="images/pic4.jpg" alt="Preview 4"></div>
+    </div>
+  </div>
+</section>
 
-    <!-- GALLERY PREVIEW -->
-    <section class="card photo-carousel">
-      <h2>Gallery Preview</h2>
-      <div class="carousel-container">
-        <div class="carousel-track">
-          <div class="carousel-item"><img src="images/pic1.jpg" alt="Preview 1"></div>
-          <div class="carousel-item"><img src="images/pic2.jpg" alt="Preview 2"></div>
-          <div class="carousel-item"><img src="images/pic3.jpg" alt="Preview 3"></div>
-          <div class="carousel-item"><img src="images/pic4.jpg" alt="Preview 4"></div>
-        </div>
-      </div>
-    </section>
+<style>
+/* ===== Medium Photo Carousel Section ===== */
+.photo-carousel {
+  margin-top: 40px;
+  overflow: hidden;
+  padding: 24px;
+}
 
-    <!-- ITEMGEN -->
-    <section class="card">
-      <h3>Itemgen - (metadata editor)</h3>
-      <div id="embedded-html">
-        <!-- Embedded content loads dynamically -->
-      </div>
-    </section>
+.carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.6s ease;
+}
+
+.carousel-item {
+  flex: 0 0 calc(25% - 15px);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+.carousel-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 25px var(--lightblue);
+}
+
+/* Optional: make carousel responsive */
+@media (max-width: 768px) {
+  .carousel-item {
+    flex: 0 0 calc(50% - 10px);
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-item {
+    flex: 0 0 100%;
+  }
+}
+</style>
+
+<script>
+(() => {
+  const track = document.querySelector('.carousel-track');
+  if (!track) return;
+  const items = document.querySelectorAll('.carousel-item');
+  let index = 0;
+  let auto;
+  const gap = 20; // matches CSS gap
+
+  // Clone first few slides for infinite scroll effect
+  items.forEach(item => {
+    const clone = item.cloneNode(true);
+    track.appendChild(clone);
+  });
+
+  const totalItems = track.children.length;
+
+  function slide() {
+    index++;
+    track.style.transition = 'transform 0.6s ease';
+    track.style.transform = `translateX(-${index * (items[0].offsetWidth + gap)}px)`;
+
+    // When the carousel hits the cloned end, reset instantly to start
+    if (index >= items.length) {
+      setTimeout(() => {
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(0)';
+        index = 0;
+      }, 600); // delay matches transition duration
+    }
+  }
+
+  function start() {
+    auto = setInterval(slide, 3000);
+  }
+
+  function stop() {
+    clearInterval(auto);
+  }
+
+  track.parentElement.addEventListener('mouseenter', stop);
+  track.parentElement.addEventListener('mouseleave', start);
+
+  start();
+})();
+</script>
+
+
+    <!-- EMBEDDED HTML SECTION (you will paste your html here) -->
+<section class="card">
+  <h3 style="margin-bottom:10px">Itemgen - (metadata editor)</h3>
+  <div id="embedded-html" contenteditable="false">
+    <!-- 🔥 /giveme Command Generator -->
+    <div class="container" style="width:100%;max-width:700px;background-color:#1b1b1b;border-radius:12px;padding:20px;box-shadow:0 0 20px rgba(0,0,0,0.8);">
+      <h1 style="text-align:center;color:#AE81FF;margin-bottom:20px;">/giveme Command Generator</h1>
+
+      <div id="sections"></div>
+
+      <button onclick="generateCommand()" style="background-color:#AE81FF;color:#fff;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:10px;transition:0.2s;">Generate Command</button>
+      <textarea id="output" readonly placeholder="Your generated /giveme command will appear here..." style="width:100%;min-height:120px;padding:10px;border-radius:8px;border:none;background-color:#2c2c2c;color:#fff;resize:vertical;font-family:monospace;margin-top:10px;"></textarea>
+      <button class="copy-button" onclick="copyCommand()" style="background-color:#FFDF00;color:#111;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:10px;">Copy Command</button>
+    </div>
+
+    <script>
+    const sectionsData = [
+        {
+            title: "Basic Info",
+            vars: ["item_name","item_display_name","short_name","desc_color","item_color_hex","item_level","item_uses"],
+            colorFields: ["desc_color","item_color_hex"]
+        },
+        {
+            title: "Enchantments",
+            vars: ["sharpness_value","knockback_value","efficiency_value","fortune_value","unbreaking_value","sharpness_level","knockback_level","efficiency_level","fortune_level","unbreaking_level"]
+        },
+        {
+            title: "Damage Groups",
+            vars: [
+                "fleshy_dmg",      // <-- ADDED: player/mob damage
+                "snappy_dmg",
+                "choppy_dmg",
+                "cracky_dmg",
+                "crumbly_dmg",
+                "hand_dmg",
+                "instant_dmg",
+                "flammable_dmg",
+                "attached_dmg",
+                "falling_dmg",
+                "jump_dmg",
+                "liquid_dmg",
+                "tool_level"
+            ]
+        },
+        {
+            title: "Tool Stats",
+            vars: ["punch_speed","drop_level","attack_uses"]
+        }
+    ];
+
+    const container = document.getElementById('sections');
+    sectionsData.forEach((sec, idx) => {
+        const header = document.createElement('div');
+        header.className = 'section-header';
+        header.textContent = sec.title;
+        header.style = "cursor:pointer;padding:10px;margin:5px 0;font-weight:bold;border-radius:6px;transition:all 0.2s;user-select:none;background:#2c2c2c;color:#eee;";
+        header.onclick = () => {
+            header.classList.toggle('active');
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            if (header.classList.contains('active')) header.style.boxShadow = '0 0 12px #AE81FF';
+            else header.style.boxShadow = 'none';
+        };
+
+        const content = document.createElement('div');
+        content.className = 'section-content';
+        content.style = "display:none;padding:10px 0;";
+
+        sec.vars.forEach(v => {
+            const label = document.createElement('label');
+            label.textContent = v.replace(/_/g,' ').toUpperCase();
+            label.style = "display:block;margin:5px 0 3px;font-size:0.9em;";
+            const input = document.createElement('input');
+            input.type = sec.colorFields && sec.colorFields.includes(v) ? 'color' : 'text';
+            input.id = v;
+            input.placeholder = v;
+            input.style = "width:100%;padding:8px;border-radius:6px;border:none;background-color:#2c2c2c;color:#eee;margin-bottom:8px;";
+            content.appendChild(label);
+            content.appendChild(input);
+        });
+
+        container.appendChild(header);
+        container.appendChild(content);
+    });
+
+    function generateCommand() {
+        const allVars = [];
+        sectionsData.forEach(sec => allVars.push(...sec.vars));
+        const v = {};
+        allVars.forEach(key => {
+            const el = document.getElementById(key);
+            if(el) v[key] = el.value || "0";
+        });
+
+        // ---- minimal change: include fleshy_dmg in damage_groups ----
+        const cmd = `/giveme ${v.item_name} 1 0 "\\u0001is_enchanted\\u00021\\u0003x_enchanting\\u0002return {\\n\\t[\\\"sharpness\\\"] = { [\\\"value\\\"] = ${v.sharpness_value} },\\n\\t[\\\"knockback\\\"] = { [\\\"value\\\"] = ${v.knockback_value} },\\n\\t[\\\"efficiency\\\"] = { [\\\"value\\\"] = ${v.efficiency_value} },\\n\\t[\\\"fortune\\\"] = { [\\\"value\\\"] = ${v.fortune_value} },\\n\\t[\\\"unbreaking\\\"] = { [\\\"value\\\"] = ${v.unbreaking_value} }\\n}\\u0003tool_capabilities\\u0002{\\n\\t\\\"damage_groups\\\" : \\n\\t{\\n\\t\\t\\\"fleshy\\\" : ${v.fleshy_dmg},\\n\\t\\t\\\"snappy\\\" : ${v.snappy_dmg},\\n\\t\\t\\\"choppy\\\" : ${v.choppy_dmg},\\n\\t\\t\\\"cracky\\\" : ${v.cracky_dmg},\\n\\t\\t\\\"crumbly\\\" : ${v.crumbly_dmg},\\n\\t\\t\\\"oddly_breakable_by_hand\\\" : ${v.hand_dmg},\\n\\t\\t\\\"dig_immediate\\\" : ${v.instant_dmg},\\n\\t\\t\\\"flammable\\\" : ${v.flammable_dmg},\\n\\t\\t\\\"attached_node\\\" : ${v.attached_dmg},\\n\\t\\t\\\"falling_node\\\" : ${v.falling_dmg},\\n\\t\\t\\\"disable_jump\\\" : ${v.jump_dmg},\\n\\t\\t\\\"liquid\\\" : ${v.liquid_dmg},\\n\\t\\t\\\"level\\\" : ${v.tool_level}\\n\\t},\\n\\t\\\"full_punch_interval\\\" : ${v.punch_speed},\\n\\t\\\"groupcaps\\\" : null,\\n\\t\\\"max_drop_level\\\" : ${v.drop_level},\\n\\t\\\"punch_attack_uses\\\" : ${v.attack_uses}\\n}\\u0003enchant_description\\u0002\\n\\u001b(c@#AE81FF)\\u001b(T@x_enchanting)Enchanted\\u001bE\\u001b(c@#ffffff)\\n\\u001b(T@x_enchanting)Sharpness\\u001bE ${v.sharpness_level}\\n\\u001b(T@x_enchanting)Knockback\\u001bE ${v.knockback_level}\\n\\u001b(T@x_enchanting)Efficiency\\u001bE ${v.efficiency_level}\\n\\u001b(T@x_enchanting)Fortune\\u001bE ${v.fortune_level}\\n\\u001b(T@x_enchanting)Unbreaking\\u001bE ${v.unbreaking_level}\\u0003is_sharpness\\u00021\\u0003is_knockback\\u00021\\u0003is_efficiency\\u00021\\u0003is_fortune\\u00021\\u0003is_unbreaking\\u00021\\u0003description\\u0002\\u001b(c@${v.desc_color})\\u001b(T@default)${v.item_display_name}\\u001bE\\n\\u001b(c@#ffdf00)\\u001b(T@toolranks)Level: \\u001bF${v.item_level}\\u001bE\\u001bE\\n\\u001b(c@#9d9d9d)\\u001b(T@toolranks)Uses: \\u001bF${v.item_uses}\\u001bE\\u001bE\\n\\n\\u001b(c@#AE81FF)\\u001b(T@x_enchanting)Enchanted\\u001bE\\u001b(c@#ffffff)\\n\\u001b(T@x_enchanting)Sharpness\\u001bE ${v.sharpness_level}\\u0003description\\u0002\\u001b(c@${v.desc_color})${v.item_display_name}\\u0003short_description\\u0002\\u001b(c@${v.desc_color})${v.short_name}\\u001bE\\u0003color\\u0002${v.item_color_hex}\\u0003\\u0003"`;
+
+        document.getElementById('output').value = cmd;
+    }
+
+    function copyCommand() {
+        const output = document.getElementById('output');
+        output.select();
+        document.execCommand('copy');
+        alert("Command copied to clipboard!");
+    }
+    </script>
+  </div>
+</section>
 
     <!-- TABLE -->
-    <section class="card" id="item-table"></section>
+<section class="card">
+  <h2>Item Variable Table</h2>
+  <table class="glow">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Variable Name</th>
+        <th>Purpose / Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Basic Info</b></td><td>item_name</td><td>The internal item ID (e.g., <code>workbench:hammer</code>).</td></tr>
+      <tr><td></td><td>item_display_name</td><td>The full display name of the item shown in-game.</td></tr>
+      <tr><td></td><td>short_name</td><td>Short version of item name (used for compact UI).</td></tr>
+      <tr><td></td><td>desc_color</td><td>Hex or style color for description text (e.g. <code>#ff0000</code>).</td></tr>
+      <tr><td></td><td>item_color_hex</td><td>Color tint for item display (affects tooltip visuals).</td></tr>
+      <tr><td></td><td>item_level</td><td>Tool or weapon level display (e.g. <code>1</code>, <code>2</code>, etc.).</td></tr>
+      <tr><td></td><td>item_uses</td><td>Number of remaining uses or durability indicator.</td></tr>
 
-    <!-- BOTTOM ROW -->
+      <tr><td><b>Enchantments (Values)</b></td><td>sharpness_value</td><td>Numeric power level of Sharpness (can be decimal).</td></tr>
+      <tr><td></td><td>knockback_value</td><td>Knockback strength multiplier (e.g. <code>200.25</code>).</td></tr>
+      <tr><td></td><td>efficiency_value</td><td>Efficiency (speed boost for mining tools).</td></tr>
+      <tr><td></td><td>fortune_value</td><td>Fortune (drops increase rate).</td></tr>
+      <tr><td></td><td>unbreaking_value</td><td>Reduces durability loss chance.</td></tr>
+
+      <tr><td><b>Enchantments (Levels/Text)</b></td><td>sharpness_level</td><td>Display level (e.g. <code>I</code>, <code>II</code>, <code>III</code>).</td></tr>
+      <tr><td></td><td>knockback_level</td><td>Display level for Knockback.</td></tr>
+      <tr><td></td><td>efficiency_level</td><td>Display level for Efficiency.</td></tr>
+      <tr><td></td><td>fortune_level</td><td>Display level for Fortune.</td></tr>
+      <tr><td></td><td>unbreaking_level</td><td>Display level for Unbreaking.</td></tr>
+
+      <tr><td><b>Damage Groups</b></td><td>snappy_dmg</td><td>Damage vs “snappy” nodes (like plants).</td></tr>
+      <tr><td></td><td>choppy_dmg</td><td>Damage vs wood-like nodes.</td></tr>
+      <tr><td></td><td>cracky_dmg</td><td>Damage vs stone-like nodes.</td></tr>
+      <tr><td></td><td>crumbly_dmg</td><td>Damage vs dirt-like nodes.</td></tr>
+      <tr><td></td><td>hand_dmg</td><td>Damage for hand-breakable nodes.</td></tr>
+      <tr><td></td><td>instant_dmg</td><td>Instant break damage group.</td></tr>
+      <tr><td></td><td>flammable_dmg</td><td>Effectiveness against flammable materials.</td></tr>
+      <tr><td></td><td>attached_dmg</td><td>Damage to attached nodes (like torches).</td></tr>
+      <tr><td></td><td>falling_dmg</td><td>Interaction with falling nodes (like sand).</td></tr>
+      <tr><td></td><td>jump_dmg</td><td>Damage applied when entity jumps (rare use).</td></tr>
+      <tr><td></td><td>liquid_dmg</td><td>Damage or effectiveness in liquids.</td></tr>
+      <tr><td></td><td>tool_level</td><td>Tool’s overall level for node-breaking capability.</td></tr>
+
+      <tr><td><b>Tool Stats</b></td><td>punch_speed</td><td>Time between attacks (lower = faster).</td></tr>
+      <tr><td></td><td>drop_level</td><td>Max drop level allowed for mined blocks.</td></tr>
+      <tr><td></td><td>attack_uses</td><td>How many hits before item breaks (durability).</td></tr>
+    </tbody>
+  </table>
+</section>
+
+    <!-- BIG BOTTOM ROW: color wheel + actions -->
     <div class="bottom-row">
       <div class="left-col card">
-        <h3>Interactive Color Wheel</h3>
+        <h3 style="margin-bottom:12px">Interactive Color Wheel</h3>
         <div class="color-wrap">
           <div class="wheel-box">
+            <!-- Canvas ring -->
             <canvas id="hueCanvas" width="260" height="260"></canvas>
+            <!-- inner square for sat/value -->
             <canvas id="svCanvas" width="160" height="160"></canvas>
           </div>
+
           <div class="color-info">
             <div class="color-sample" id="colorSample"></div>
             <div class="codes">
@@ -75,24 +519,270 @@
               <div>RGB: <span id="rgbVal">0, 0, 0</span></div>
             </div>
           </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.45)">Challenge: try get your favourite colour in this tricky colour wheel!.</div>
         </div>
       </div>
 
       <div class="right-col">
-        <section class="card">
-          <h3>Quick Actions</h3>
+        <section class="card" style="margin-bottom:16px">
+          <h3 style="margin-bottom:8px">Quick Actions</h3>
+          <div style="margin-bottom:12px;color:rgba(255,255,255,0.45)">Join community & subscribe</div>
           <div class="actions">
-            <a class="btn discord" href="https://discord.gg/r4Ehek38TE" target="_blank">Join Discord</a>
-            <a class="btn youtube" href="https://youtube.com/@z1ngam6" target="_blank">Subscribe YouTube</a>
+            <a class="btn discord" href="https://discord.gg/r4Ehek38TE" target="_blank" rel="noopener noreferrer">
+              <!-- simple icon -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6))"><path d="M20 3L4 3C2.9 3 2 3.9 2 5v14c0 1.1.9 2 2 2h14l4-4V5c0-1.1-.9-2-2-2z" fill="white" opacity="0.06"/></svg>
+              Join Discord
+            </a>
+
+            <a class="btn youtube" href="https://youtube.com/@z1ngam6?si=-5fJwkvw1B8wPgNR" target="_blank" rel="noopener noreferrer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="filter:drop-shadow(0 2px 6px rgba(0,0,0,0.6))"><path d="M10 15l5.19-3L10 9v6z" fill="#fff" opacity="0.95"/></svg>
+              Subscribe YouTube
+            </a>
           </div>
+        </section>
+
+        <section class="card">
+          <h3 style="margin-bottom:12px">Small Preview</h3>
+          <p style="opacity:.75;font-size:13px">Preview panel for quick color checks and notes. Use the wheel to pick a color — hex and rgb update live.</p>
         </section>
       </div>
     </div>
 
-    <footer>Built by ZINGAMY • Creations for Multicraft</footer>
+    <footer>Built by ZINGAMY • creations for Multicraft</footer>
   </div>
 
-  <!-- JS -->
-  <script src="main.js"></script>
+<script>
+/* ----------------------------
+  Carousel (arc) autoplay + swipe
+   - shows 4 .photo elements on arc
+-----------------------------*/
+(function(){
+  const arc = document.getElementById('arc');
+  const photos = Array.from(arc.querySelectorAll('.photo'));
+  let order = [0,1,2,3]; // indices
+  let auto = true, interval = 2800, timer=null;
+  function applyPositions(){
+    photos.forEach((p,i)=>{
+      p.classList.remove('pos0','pos1','pos2','pos3');
+      p.classList.add('pos' + i);
+      // update transform order visually (z-index)
+      p.style.zIndex = (4 - i) + '';
+    });
+  }
+  // rotate right by 1
+  function rotateRight(){
+    const first = photos.shift();
+    photos.push(first);
+    // reattach in DOM order
+    photos.forEach((p,i)=>arc.appendChild(p));
+    applyPositions();
+  }
+  function rotateLeft(){
+    const last = photos.pop();
+    photos.unshift(last);
+    photos.forEach((p,i)=>arc.appendChild(p));
+    applyPositions();
+  }
+
+  // autoplay
+  function startAuto(){ stopAuto(); timer = setInterval(rotateLeft, interval) }
+  function stopAuto(){ if(timer) clearInterval(timer); timer = null }
+
+  // initial
+  applyPositions();
+  startAuto();
+
+  // hover stops autoplay
+  arc.addEventListener('mouseenter', ()=>{ stopAuto(); });
+  arc.addEventListener('mouseleave', ()=>{ startAuto(); });
+
+  // touch / drag
+  let startX=null, dragging=false;
+  arc.addEventListener('pointerdown', (e)=>{
+    startX = e.clientX; dragging=true; arc.classList.add('dragging'); stopAuto();
+  });
+  window.addEventListener('pointermove', (e)=>{
+    if(!dragging) return;
+    const dx = e.clientX - startX;
+    // small threshold to allow swipe
+    if(Math.abs(dx) > 40){
+      if(dx > 0){ rotateRight(); }
+      else { rotateLeft(); }
+      startX = e.clientX;
+    }
+  });
+  window.addEventListener('pointerup', ()=>{ dragging=false; arc.classList.remove('dragging'); startAuto(); });
+
+  // also allow click on images to bring to front (simple behavior)
+  photos.forEach((p, idx)=> p.addEventListener('click', ()=>{
+    // compute how many rotates to bring clicked to center (pos1/pos2)
+    const curIdx = Array.from(arc.children).indexOf(p);
+    // prefer minimal rotation
+    if(curIdx === 0) { rotateLeft(); }
+    else if(curIdx === 3) { rotateRight(); }
+    // else it's middle-ish already
+  }));
+
+})();
+
+/* ----------------------------
+ Interactive color wheel + SV square
+ - hue ring on hueCanvas (click/drag) selects hue
+ - svCanvas shows square for saturation/value on chosen hue
+ - shows hex & rgb
+-----------------------------*/
+(function(){
+  const hueC = document.getElementById('hueCanvas');
+  const svC = document.getElementById('svCanvas');
+  const hexVal = document.getElementById('hexVal');
+  const rgbVal = document.getElementById('rgbVal');
+  const sample = document.getElementById('colorSample');
+
+  const hueCtx = hueC.getContext('2d');
+  const svCtx = svC.getContext('2d');
+  const hW = hueC.width, hH = hueC.height;
+  const sW = svC.width, sH = svC.height;
+
+  // draw hue ring
+  function drawHue(){
+    const cx = hW/2, cy = hH/2, radius = Math.min(cx,cy) - 6;
+    hueCtx.clearRect(0,0,hW,hH);
+    // draw ring by drawing many arcs
+    const step = 1; // degrees
+    for(let deg=0; deg<360; deg+=step){
+      const start = (deg-1) * Math.PI/180;
+      const end = deg * Math.PI/180;
+      hueCtx.beginPath();
+      hueCtx.moveTo(cx,cy);
+      hueCtx.arc(cx,cy, radius, start, end);
+      hueCtx.closePath();
+      hueCtx.fillStyle = 'hsl('+deg+',100%,50%)';
+      hueCtx.fill();
+    }
+    // make center cutout
+    hueCtx.globalCompositeOperation = 'destination-out';
+    hueCtx.beginPath();
+    hueCtx.arc(cx,cy, radius*0.6, 0, Math.PI*2);
+    hueCtx.fill();
+    hueCtx.globalCompositeOperation = 'source-over';
+    // add subtle inner ring shadow
+    hueCtx.beginPath();
+    hueCtx.arc(cx,cy,radius*0.62,0,Math.PI*2);
+    hueCtx.strokeStyle = 'rgba(0,0,0,0.25)';
+    hueCtx.lineWidth = 6;
+    hueCtx.stroke();
+  }
+
+  // draw SV square for current hue
+  let curHue = 0;
+  function drawSV(){
+    svCtx.clearRect(0,0,sW,sH);
+    // fill with hue gradient horizontally (saturation)
+    const satGrad = svCtx.createLinearGradient(0,0,sW,0);
+    satGrad.addColorStop(0, 'rgba(255,255,255,1)');
+    satGrad.addColorStop(1, 'hsl('+curHue+',100%,50%)');
+    svCtx.fillStyle = satGrad;
+    svCtx.fillRect(0,0,sW,sH);
+    // overlay gradient for value (vertical)
+    const valGrad = svCtx.createLinearGradient(0,0,0,sH);
+    valGrad.addColorStop(0, 'rgba(0,0,0,0)');
+    valGrad.addColorStop(1, 'rgba(0,0,0,1)');
+    svCtx.fillStyle = valGrad;
+    svCtx.fillRect(0,0,sW,sH);
+  }
+
+  function posToHue(x,y){
+    const cx = hW/2, cy = hH/2;
+    const dx = x - cx, dy = y - cy;
+    const angle = Math.atan2(dy,dx) * 180/Math.PI;
+    let deg = angle + 90;
+    if(deg < 0) deg += 360;
+    return Math.round(deg);
+  }
+
+  // get color from SV pos (x,y)
+  function svPosToRGB(sx,sy){
+    const s = Math.max(0, Math.min(1, sx / sW));
+    const v = 1 - Math.max(0, Math.min(1, sy / sH));
+    return hsvToRgb(curHue/360, s, v);
+  }
+
+  function hsvToRgb(h, s, v) {
+    // h in [0,1]
+    let r=0,g=0,b=0;
+    const i = Math.floor(h * 6);
+    const f = h*6 - i;
+    const p = v * (1 - s);
+    const q = v * (1 - f * s);
+    const t = v * (1 - (1 - f) * s);
+    switch(i % 6){
+      case 0: r=v,g=t,b=p; break;
+      case 1: r=q,g=v,b=p; break;
+      case 2: r=p,g=v,b=t; break;
+      case 3: r=p,g=q,b=v; break;
+      case 4: r=t,g=p,b=v; break;
+      case 5: r=v,g=p,b=q; break;
+    }
+    return { r: Math.round(r*255), g: Math.round(g*255), b: Math.round(b*255) };
+  }
+
+  function rgbToHex({r,g,b}){
+    return '#' + [r,g,b].map(x=> x.toString(16).padStart(2,'0')).join('');
+  }
+
+  // initial draw
+  drawHue(); drawSV();
+
+  // interaction handlers
+  let draggingHue=false, draggingSV=false;
+  function updateFromSV(x,y){
+    // convert to local coords
+    const rect = svC.getBoundingClientRect();
+    const lx = Math.max(0, Math.min(sW, x - rect.left));
+    const ly = Math.max(0, Math.min(sH, y - rect.top));
+    const rgb = svPosToRGB(lx, ly);
+    const hex = rgbToHex(rgb);
+    hexVal.textContent = hex;
+    rgbVal.textContent = rgb.r + ', ' + rgb.g + ', ' + rgb.b;
+    sample.style.background = hex;
+  }
+  function updateFromHue(x,y){
+    const rect = hueC.getBoundingClientRect();
+    const lx = x - rect.left;
+    const ly = y - rect.top;
+    curHue = posToHue(lx, ly);
+    drawSV();
+    // update sample using center of SV default
+    const rgb = svPosToRGB(sW/2, sH/2);
+    const hex = rgbToHex(rgb);
+    hexVal.textContent = hex;
+    rgbVal.textContent = rgb.r + ', ' + rgb.g + ', ' + rgb.b;
+    sample.style.background = hex;
+  }
+
+  // pointer events for hue
+  hueC.addEventListener('pointerdown', (e)=>{ draggingHue=true; updateFromHue(e.clientX, e.clientY); hueC.setPointerCapture(e.pointerId); });
+  hueC.addEventListener('pointermove', (e)=>{ if(draggingHue) updateFromHue(e.clientX, e.clientY); });
+  hueC.addEventListener('pointerup', (e)=>{ draggingHue=false; try{ hueC.releasePointerCapture(e.pointerId) }catch(e){} });
+
+  // pointer events for SV
+  svC.addEventListener('pointerdown', (e)=>{ draggingSV=true; updateFromSV(e.clientX, e.clientY); svC.setPointerCapture(e.pointerId); });
+  svC.addEventListener('pointermove', (e)=>{ if(draggingSV) updateFromSV(e.clientX, e.clientY); });
+  svC.addEventListener('pointerup', (e)=>{ draggingSV=false; try{ svC.releasePointerCapture(e.pointerId) }catch(e){} });
+
+  // also support clicks
+  hueC.addEventListener('click', (e)=>updateFromHue(e.clientX, e.clientY));
+  svC.addEventListener('click', (e)=>updateFromSV(e.clientX, e.clientY));
+
+  // init values: default hue 0
+  curHue = 210; drawSV();
+  // pick center by default
+  const initRgb = svPosToRGB(sW/2, sH/2);
+  hexVal.textContent = rgbToHex(initRgb);
+  rgbVal.textContent = initRgb.r + ', ' + initRgb.g + ', ' + initRgb.b;
+  sample.style.background = rgbToHex(initRgb);
+
+})();
+</script>
 </body>
 </html>

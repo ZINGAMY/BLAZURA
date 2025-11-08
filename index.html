@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blazura - Main Page</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <header>
+      <div class="brand">
+        <div class="logo">
+          <img src="assets/logo.png" alt="logo" onerror="this.style.display='none'">
+        </div>
+        <div>
+          <h1>Blazura</h1>
+          <div class="subtext">by ZINGAMY</div>
+        </div>
+      </div>
+
+      <div class="head-right">
+        <div class="arc" id="arc">
+          <div class="photo pos0" data-index="0"><img src="assets/photo1.jpg" alt=""></div>
+          <div class="photo pos1" data-index="1"><img src="assets/photo2.jpg" alt=""></div>
+          <div class="photo pos2" data-index="2"><img src="assets/photo3.jpg" alt=""></div>
+          <div class="photo pos3" data-index="3"><img src="assets/photo4.jpg" alt=""></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- GALLERY PREVIEW -->
+    <section class="card photo-carousel">
+      <h2>Gallery Preview</h2>
+      <div class="carousel-container">
+        <div class="carousel-track">
+          <div class="carousel-item"><img src="images/pic1.jpg" alt="Preview 1"></div>
+          <div class="carousel-item"><img src="images/pic2.jpg" alt="Preview 2"></div>
+          <div class="carousel-item"><img src="images/pic3.jpg" alt="Preview 3"></div>
+          <div class="carousel-item"><img src="images/pic4.jpg" alt="Preview 4"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ITEMGEN -->
+    <section class="card">
+      <h3>Itemgen - (metadata editor)</h3>
+      <div id="embedded-html">
+        <!-- Embedded content loads dynamically -->
+      </div>
+    </section>
+
+    <!-- TABLE -->
+    <section class="card" id="item-table"></section>
+
+    <!-- BOTTOM ROW -->
+    <div class="bottom-row">
+      <div class="left-col card">
+        <h3>Interactive Color Wheel</h3>
+        <div class="color-wrap">
+          <div class="wheel-box">
+            <canvas id="hueCanvas" width="260" height="260"></canvas>
+            <canvas id="svCanvas" width="160" height="160"></canvas>
+          </div>
+          <div class="color-info">
+            <div class="color-sample" id="colorSample"></div>
+            <div class="codes">
+              <div>HEX: <span id="hexVal">#000000</span></div>
+              <div>RGB: <span id="rgbVal">0, 0, 0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <section class="card">
+          <h3>Quick Actions</h3>
+          <div class="actions">
+            <a class="btn discord" href="https://discord.gg/r4Ehek38TE" target="_blank">Join Discord</a>
+            <a class="btn youtube" href="https://youtube.com/@z1ngam6" target="_blank">Subscribe YouTube</a>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <footer>Built by ZINGAMY • Creations for Multicraft</footer>
+  </div>
+
+  <!-- JS -->
+  <script src="main.js"></script>
+</body>
+</html>
